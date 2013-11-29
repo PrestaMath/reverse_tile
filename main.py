@@ -97,19 +97,12 @@ def divide_screen():
 class Play_ground(Widget):
     b_wait = False
     
-    end_of_inpact =[]
+    end_of_impact =[]
     
     def __init__(self, **kwargs):
         super(Play_ground, self).__init__(**kwargs) #constructeur du parent
         self.caller_instance = kwargs['caller_instance']
         self.new_grid()
-        
-        #Window.size=(160,120)
-        
-        
-        
-        
-        #self.close_settings() voir config parser
         
     def new_game(self,instance):
         self.new_grid()
@@ -192,7 +185,7 @@ class Play_ground(Widget):
                 
 
     def possible_move(self,xm,ym,player,adversary):
-        self.end_of_inpact=[]
+        self.end_of_impact=[]
         '''
         array = [(x-1,y-1),(x,y-1),(x+1,y-1),
             (x-1,y),(x+1,y),
@@ -224,7 +217,7 @@ class Play_ground(Widget):
                         
                     if self.grid[x+vx][y+vy] == player:
                         #move is ok
-                        self.end_of_inpact.append((x+vx,y+vy,1))    #add impacted tiles number
+                        self.end_of_impact.append((x+vx,y+vy,1))    #add impacted tiles number
                         continue
                     if self.grid[x+vx][y+vy] == ' ':
                          #bad move
@@ -237,9 +230,9 @@ class Play_ground(Widget):
                             v += 1
                         if self.in_grid_boundary(x+vx*v,y+vy*v) and self.grid[x+vx*v][y+vy*v] == player :
                             #move is ok
-                            self.end_of_inpact.append((x+vx*v,y+vy*v,v))
+                            self.end_of_impact.append((x+vx*v,y+vy*v,v))
                             continue
-        if not self.end_of_inpact:
+        if not self.end_of_impact:
             return False
         return True
 
@@ -260,7 +253,7 @@ class Play_ground(Widget):
         self.previous_grid = deepcopy(self.grid)
         self.grid[x][y] = self.player
         
-        for coord in self.end_of_inpact:
+        for coord in self.end_of_impact:
             xe = coord[0]
             ye = coord[1]
             vx = x - xe
@@ -289,11 +282,11 @@ class Play_ground(Widget):
         
         self.label_score.text='Score %i-%i' % ( score['O'],score['X'])
         
-    # self.end_of_inpact contains all impacts for currently tested move
-    # self.end_of_inpact is cleared for each tested move
+    # self.end_of_impact contains all impacts for currently tested move
+    # self.end_of_impact is cleared for each tested move
     def calcul_impact_sum(self):
         impact_sum = 0 
-        for coord in self.end_of_inpact:
+        for coord in self.end_of_impact:
             impact_sum += coord[2]
         return impact_sum
     
