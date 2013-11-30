@@ -3,13 +3,14 @@ reversi
 
 Reversi Othello game programmed with kivy
 
-Will work on 
--Windows XP and more 
--Linux
--Raspberry PI
--Android : published on Google Play  : https://play.google.com/store/apps/details?id=org.reversi
--Mac
--IOS : I plan to have a mac and then pay 90 $ to Apple to be able to publish it
+Will work on :
+- Windows xp and more 
+- Linux
+- Raspberry PI
+- Android : published on Google Play  : https://play.google.com/store/apps/details?id=org.reversi
+- Mac 
+- IOS : I plan to have a mac and then pay 90 $ to Apple to be able to publish it
+
 
 
 Todo :
