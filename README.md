@@ -4,7 +4,7 @@ reversi
 Reversi Othello game programmed with kivy
 
 Will work on :
-- Windows xp and more 
+- Windows xp and more great products from Microsoft ... 
 - Linux
 - Raspberry PI
 - Android : published on Google Play  : https://play.google.com/store/apps/details?id=org.reversi
@@ -15,7 +15,7 @@ Will work on :
 
 Todo :
 - add hint
-- make a decent interface
+- make a decent interface with kv file
 - clean code, weird things and bad english
 - improve computer AI
 - display score with player indication
