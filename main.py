@@ -23,13 +23,16 @@ import random
 #todo : better locking, lock when it is flipping and when is computer turn
 #todo : flip sound
 #todo : show hint
+#todo : check if resume game not faulty
+
+#Window.size=(320,200)
 
 TEXTURES = {}
+TEXTURES['empty'] = Image(source="image%sempty.png" % sep).texture
 for i in range(0,6):
     TEXTURES['black%i' % i] = Image(source="image%sblack%i.png" % (sep,i) ).texture
     TEXTURES['white%i' % i] = Image(source="image%swhite%i.png" % (sep,i) ).texture
 
-empty_texture = Image(source="image%sempty.png" % sep).texture
 
 def swap(s1, s2):
     return s2, s1
@@ -49,7 +52,7 @@ class tile(Image):
         
         if self.collide_point(*touch.pos):
             self.caller_instance.play(int(self.rev_x),int(self.rev_y))
-            return True #should perhaps return true to stop further testing
+            return True 
 
     def display_flipping(self,to_color):
         self.flip_state = 0
@@ -78,7 +81,7 @@ class tile(Image):
             elif s_texture =='X':
                 self.texture = TEXTURES['black0']
             else:
-                self.texture = empty_texture
+                self.texture = TEXTURES['empty']
         else:                
             self.display_flipping(s_texture)
 
@@ -102,14 +105,21 @@ class Play_ground(Widget):
     def __init__(self, **kwargs):
         super(Play_ground, self).__init__(**kwargs) #constructeur du parent
         self.caller_instance = kwargs['caller_instance']
+        resume = self.caller_instance.config.get('section1', 'resume')
+        if len(resume) == 64:
+            self.resume = resume.replace('_',' ')
+        else:
+            self.resume = ''
+        
         self.new_grid()
         
     def new_game(self,instance):
+        self.resume = ''
         self.new_grid()
 
     def on_resize(width,height):
         pass
-        
+
     def new_grid(self):
         grid_width,menu_width = divide_screen()
         
@@ -124,11 +134,18 @@ class Play_ground(Widget):
         self.adversary ='X'
         
         self.grid = [[' ' for x in xrange(8)] for x in xrange(8)]
-        
-        self.grid[3][3]='O'
-        self.grid[4][4]='O'
-        self.grid[3][4]='X'
-        self.grid[4][3]='X'
+
+        if self.resume == '':
+            self.grid[3][3]='O'
+            self.grid[4][4]='O'
+            self.grid[3][4]='X'
+            self.grid[4][3]='X'
+        else:
+            idx = 0
+            for y in range(0,8):
+                for x in range(0,8):
+                    self.grid[y][x]=self.resume[idx]
+                    idx += 1
         self.previous_grid = deepcopy(self.grid)
         
         self.label_score = Label()
@@ -155,7 +172,7 @@ class Play_ground(Widget):
         
 
         self.difficulty = self.caller_instance.config.get('section1', 'difficulty')
-        #self.caller_instance.config.get('section1', 'difficulty')
+        
         btn3 = Button(text=self.difficulty)
         
         btn3.bind(on_press=self.toggle_difficulty)
@@ -180,9 +197,6 @@ class Play_ground(Widget):
         for child in self.graphical_grid.children:
             if self.grid[int(child.rev_x)][int(child.rev_y)] != self.previous_grid[int(child.rev_x)][int(child.rev_y)]:
                 child.toggle_texture(self.grid[int(child.rev_x)][int(child.rev_y)],self.previous_grid[int(child.rev_x)][int(child.rev_y)])
-                        
-                
-                
 
     def possible_move(self,xm,ym,player,adversary):
         self.end_of_impact=[]
@@ -191,8 +205,8 @@ class Play_ground(Widget):
             (x-1,y),(x+1,y),
          (x-1,y+1),(x,y+1),(x+1,y+1),
          ]
+         # then remove out of boundary
          '''
-        #remove out of boundary
 
         for y in range(ym-1,ym+2):
             for x in range(xm-1,xm+2):
@@ -312,7 +326,6 @@ class Play_ground(Widget):
             if move in badpos:
                 move_cop.remove(move)
                 
-                
         if len(move_cop) == 0:      #if no choices left
             return moves
         
@@ -425,12 +438,23 @@ class Play_ground(Widget):
 
 class MyApp(App):
     def build_config(self, config):
-        config.setdefaults('section1', {'difficulty': 'easy'})
+        config.setdefaults('section1', {'difficulty': 'easy','resume':''})
+
+    def on_stop(self):
+        resume = ''
+        for y in range(0,8):
+            for x in range(0,8):
+                resume += self.game.grid[y][x]
+        resume = resume.replace(' ','_')
+        self.config.set('section1', 'resume', resume)
+        self.config.write()                  
+
+        
         
     def build(self):
         config = self.config        #config voir config parser
-        game = Play_ground(caller_instance= self)
-        return game
+        self.game = Play_ground(caller_instance= self)
+        return self.game
 		
 if __name__ in ( '__main__','__android__'): # au lieu de == '__main__'  nécessite pour fonctionner avec le kivy launcher !!!
     MyApp().run()

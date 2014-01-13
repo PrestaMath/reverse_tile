@@ -11,7 +11,8 @@ Will work on :
 - Mac 
 - IOS : I plan to have a mac and then pay 90 $ to Apple to be able to publish it
 
-
+Last changes:
+- added resume game
 
 Todo :
 - add hint
