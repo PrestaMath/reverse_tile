@@ -1,15 +1,15 @@
-reversi
+reverse tile game
 =======
 
-Reversi Othello game programmed with kivy
+Reverse tile game programmed with kivy
 
 Will work on :
-- Windows xp and more great products from Microsoft ... 
+- Windows xp and more 
 - Linux
 - Raspberry PI
-- Android : published on Google Play  : https://play.google.com/store/apps/details?id=org.reversi
+- Android : published on Google Play  (not anymore due to legal concerns, othello and reversi are copyrighted then it was not a good idea to name the game with those trademarks, gargl )
 - Mac 
-- IOS : I plan to have a mac and then pay 90 $ to Apple to be able to publish it
+
 
 Last changes:
 - added resume game
